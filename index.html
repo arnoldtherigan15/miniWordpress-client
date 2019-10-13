@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+     <!-- login google -->
+     <script src="https://apis.google.com/js/platform.js" async defer></script>
+     <meta name="google-signin-client_id" content="227948699050-ml75o10n5ftpfo4d5069bqvjtri10pr2.apps.googleusercontent.com">
+     <!-- ------- -->
+    <script src="https://kit.fontawesome.com/bc382c3fce.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <!-- using quil -->
+    <link href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet"> 
+    <script src="https://cdn.quilljs.com/1.3.4/quill.js"></script>
+    <!-- UBAH UNTUK GANTI ICON DI TAB BROWSER -->
+    <link rel="shortcut icon" href="https://icon-library.net/images/icon-for-wordpress/icon-for-wordpress-16.jpg" />
+    <title>Mini WordPress</title>
+  </head>
+  <body>
+    <div id="app">
+        <!-- LOGIN--->
+        <div class="loginRegisSection" v-show="isLogin">
+            <div class="form-wrapper" id="wrapper-login">
+                <img src='./img/bg1.jpg' alt='bg1' />
+                <div class="content-wrapper" id="content-signin">
+                    <h1>Welcome to Mini Wordpress</h1>
+                    <form class="form-login" @submit.prevent="login()">
+                        <input type="text" name="email" placeholder="email" class="input-email;" v-model="emailLogin" required/>
+                        <input type="password" name="password" placeholder="Password" class="input-password" v-model="passwordLogin" required/>
+                        <div v-if="isError">
+                            <p class="error">{{ errTemp }}</p>
+                        </div>
+                        <button type="submit" class="btn-login">LOGIN</button>
+                    </form>
+                    <div class="g-signin2" data-onsuccess="onSignIn" @click="onSignIn"></div>
+                    <p>No account? <a href="#wrapper-signup">Sign up</a></p>
+                </div>
+            </div>
+            <!-- END OF LOGIN -->
+            <!-- REGISTER -->
+            <div class="form-wrapper" id="wrapper-signup">
+                <img src='./img/bg1.jpg' alt='bg1' />
+                <div class="content-wrapper" id="content-signin">
+                    <h1>Join us!</h1>
+                    <form class="form-login" @submit.prevent="register()">
+                        <input type="email" name="email" placeholder="Email address" class="input-email" v-model="emailReg" required/>
+                        <input type="text" name="username" placeholder="Username" class="input-username" v-model="usernameReg" required/>
+                        <input type="password" name="password" placeholder="Password" class="input-password" v-model="passwordReg" required/>
+                        <div v-if="isError">
+                            <p class="error">{{ errTemp }}</p>
+                        </div>
+                        <button type="submit" class="btn-login">SIGN UP</button>
+                    </form>
+                    <p>Got account? <a href="#wrapper-login">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+        <!-- END OF REGIS -->
+
+        <!-- AFTERLOGIN -->
+        <div v-if="afterLogin">
+            <!-- Navbar Here -->
+            <header class="sticky-top">
+                <nav class="navbar bg-light">
+                    <a class="navbar-brand" href="#" @click="homeBtn()"><img class="logo" src="./img/logo.png" alt="logo.png"> Mini Wordpress</a>
+                    <div class="reader mr-auto" >
+                        <a class="navbar-brand2" href="#" @click="readAllBtn()"><i class="far fa-newspaper"></i> Reader</a>
+                    </div>
+                    <div class="navbar-nav square-nav mx-2 bg-light">
+                        <a href="#" class="nav-item mx-2" @click="writeBtn()"><i class="fas fa-plus mr-2"></i>Write</a>
+                    </div>
+                    
+                    <div class="navbar-nav mr-3 ml-2">
+                        <button @click="logout()" class="btn">Logout</button>
+                    </div>
+                </nav>
+            </header>
+            <!-- END NAVBAR -->
+            <div class="container-fluid main-body">
+                <div class="row">
+                    <div class="col-md-2 col-sm-4 side-menu">
+                        <div class="user-profile px-2 py-3 bg-light">
+                            <div>
+                                <img class="user-profile-picture" src="http://maestroselectronics.com/wp-content/uploads/bfi_thumb/blank-user-355ba8nijgtrgca9vdzuv4.jpg" alt="blank-user">
+                            </div>
+                            <div class="user-profile-expand">
+                                <div>{{ username }}</div>
+                                <div style="margin: 0 !important;">
+                                    <p style="font-size: 0.8vw;">{{ email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidenav">
+                            <a href="#" @click="homeBtn()"><i class="fas fa-home"></i> My Home</a>
+                            <a href="#"><i class="far fa-chart-bar"></i> Stats</a>
+                            <a href="#" @click="readBtn()"><i class="fab fa-readme"></i> My Article</a>
+                            <a href="#" @click="writeBtn()"><i class="fas fa-pencil-alt"></i> Write</a>
+                        </div> 
+                    </div>
+                    <div class="col-md-10 col-sm-8" style="padding-left: 0 !important;">
+                        <!-- HOME PAGE -->
+                        <div class="homePage" v-show="isHome">
+                                <div class="jumbotron jumbotron-fluid">
+                                    <div class="container">
+                                        <h1 class="display-3">Welcome to Mini WordPress</h1>
+                                        <p>“Creativity is seeing what everyone else has seen, and thinking what no one else has thought.”
+                                            – Albert Einstein</p>
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- END OF HOME PAGE -->
+                        <!-- WRITE POSTING -->
+                        <div class="writePage" v-show="isWrite">
+                            <div class="container posting">
+                                    <div v-if="isSuccess">
+                                        <div class="alert alert-success form-control my-2" role="alert">
+                                            Success add a new article
+                                        </div>
+                                    </div>
+                                    <h1>Posting a New Article</h1>
+                                    <hr>
+                                    <form class="postingForm" @submit.prevent="postArticle()">
+                                        <input type="text" id="title" class="form-control" placeholder="title" v-model="title">
+                                        <input type="text" id="editor">
+                                        <input class="btn btn-primary my-2" type="submit" value="POST">
+                                    </form>
+                            </div>
+                        </div>
+                        <!-- END OF WRITE -->
+                        <!-- READ ARTICLE -->
+                        <div class="row articles" v-show="isRead">
+                            <input class="form-control mx-5 my-5" v-model="filter" type="search" placeholder="filter by title">
+                            <div class="col-lg-12 page mb-5" v-for="(article, index) in articleData" :key="article._id">
+                                <div class="card my-2 mx-2">
+                                    <!-- Card content -->
+                                    <div class="card-body elegant-color white-text rounded-bottom">
+                                        <div class="d-flex justify-content-end">
+                                                <a href="#" class="btn btn-danger" style="float: right;" @click="deleteArticle(article._id)">delete</a>
+                                                <a href="#" class="btn btn-success" style="float: right;" @click="updateBtn(article._id,article.title,article.content)">update</a>
+                                        </div>
+                                        <!-- created at -->
+                                        {{ article.createdAt }}
+                                        <!-- Title -->
+                                        <h4 class="card-title">{{ article.title }}</h4>
+                                        <p> {{ author }} </p>
+                                        <hr class="hr-light">
+                                        <!-- Text -->
+                                        <p class="card-text white-text mb-4" v-html="article.content"></p>
+                                        <p>{{ article.content }}</p>
+                                        <!-- Link -->
+                                        <a href="#!" class="white-text d-flex justify-content-end" @click="tes(`${article._id}`)"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END OF READ -->
+                         <!-- READ All ARTICLE -->
+                         <div class="row articles" v-show="isReadAll">
+                            <input class="form-control mx-5 my-5" v-model="filter" type="search" placeholder="filter by title">
+                            <div class="col-lg-12 page mb-5" v-for="(article, index) in articleDataAll" :key="article._id">
+                                <div class="card my-2 mx-2">
+                                    <!-- Card content -->
+                                    <div class="card-body elegant-color white-text rounded-bottom">
+                                        <!-- created at -->
+                                        {{ article.createdAt }}
+                                        <!-- Title -->
+                                        <h4 class="card-title">{{ article.title }}</h4>
+                                        <p> {{ article.authorAll }} </p>
+                                        <hr class="hr-light">
+                                        <!-- Text -->
+                                        <p class="card-text white-text mb-4" v-html="article.content"></p>
+                                        <p>{{ article.content }}</p>
+                                        <!-- Link -->
+                                        <a href="#!" class="white-text d-flex justify-content-end" @click="tes(`${article._id}`)"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END OF READ All -->
+                        <!-- WRITE -->
+                        <div class="writePage" v-show="isUpdate">
+                            <div class="container posting">
+                                <div v-if="isSuccess">
+                                    <div class="alert alert-success form-control my-2" role="alert">
+                                        Update Success
+                                    </div>
+                                </div>
+                                <h1>Update Article</h1>
+                                <hr>
+                                <form class="postingForm" @submit.prevent="updateArticle()">
+                                    <input type="text" id="title" class="form-control" placeholder="title" v-model="title">
+                                    <input type="text" id="editor2" v-model="content">
+                                    <input class="btn btn-primary my-2" type="submit" value="POST">
+                                </form>
+                            </div>
+                        </div>
+                        <!-- END OF WRITE -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END OF AFTER LOGIN -->
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- bootstrap end  -->
+    <script>
+            var toolbarOptions = [
+              ['bold', 'italic']
+            ]
+            var quill = new Quill('#editor', {
+              modules: {
+                toolbar: toolbarOptions
+              },
+              theme: 'snow'
+            });
+          </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="main.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  </body>
+</html>

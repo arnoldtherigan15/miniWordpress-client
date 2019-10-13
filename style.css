@@ -1,0 +1,352 @@
+/* LOGIN FORM */
+html body {
+    overflow: hidden;
+  }
+body {
+    font-family: sans-serif;
+    padding: 0;
+    margin: 0;
+    background-image: url('./img/bg1.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.loginRegisSection h1{
+    font-size: 110%;
+}
+
+.form-wrapper {
+    width: 320px;
+    height: 500px;
+    border-radius: 4px;
+    background: rgba(99, 110, 114,1);
+    color: #FDF3F8;
+    box-shadow: 0px 1px 10px 3px rgb(255, 255, 255);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+.form-wrapper img {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    /* left: -50%; */
+    opacity: .3;
+    -webkit-filter: blur(3px);
+    filter: blur(3px);
+}
+
+.form-wrapper .content-wrapper {
+    position: relative;
+    opacity: 1;
+    width: 320px;
+    height: 500px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-flow: column;
+    -ms-flex-flow: column;
+    flex-flow: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.form-login {
+    margin: 4rem auto;
+}
+.form-login .error {
+    color: red;
+}
+.form-login input {
+    margin: 5px auto;
+    display: block;
+    border-radius: 4px;
+    background: none;
+    color: rgba(253, 243, 248, 1);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    width: 200px;
+    font-weight: bolder;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.form-login button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    display: block;
+    font-weight: bolder;
+    color: #FDF3F8;
+    background: #9dd7e7;
+    border: none;
+    border-radius: 4px;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.form-login input:focus {
+    outline: none;
+    color: rgba(253, 243, 248, 1);
+    background: #9dd7e7;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #9dd7e7;
+}
+
+.form-login input:hover {
+    color: rgba(253, 243, 248, 1);
+    background: #9dd7e7;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #9dd7e7;
+}
+
+.form-login button:hover {
+    cursor: pointer;
+    box-shadow: 0px 1px 10px 1px #9dd7e7;
+}
+
+.form-wrapper .content-wrapper p {
+    font-size: 100%;
+    color: rgba(223, 214, 217, .6);
+}
+
+.form-wrapper .content-wrapper a {
+    color: #FDF3F8;
+    text-decoration: none;
+}
+
+#wrapper-signup {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#wrapper-signup:target {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+}
+
+#wrapper-signup:target #wrapper-login,
+#wrapper-signin:target #wrapper-signup {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#wrapper-signup,
+#wrapper-login {
+    -webkit-transition: .2s linear all;
+    transition: .2s linear all;
+}
+/* END OF LOGIN FORM */
+
+
+.navbar {
+    padding: 0 !important;
+}
+.logo {
+    width: 50px !important;
+}
+
+.menu {
+    display: flex;
+    background-color: #006088;
+    align-items: center !important;
+}
+.navbar-brand {
+    color: #fff;
+    background-color: #161616;
+    width: 16.7vw;
+    height: 100%;
+    padding: 20px;   
+}
+
+.reader a{
+    color: #000 !important;
+    /* justify-content: left; */
+    font-size: 1.25rem;
+    text-decoration: none !important;
+    /* float: left !important; */
+}
+
+a:hover{
+    color: #fff !important;
+}
+
+.square-nav {
+    background-color: #fff;
+    border-radius:5px;
+}
+.square-nav a {
+    color: #000 !important;
+    text-decoration: none !important;
+}
+.user-profile-picture {
+    width: 40px !important;
+    border-radius: 50%;
+    border: 1px solid #161616;
+    /* margin: 5px; */
+    padding: 5px;
+}
+
+.yellow {
+    background-color: yellow;
+}
+.green {
+    background-color: green;
+}
+.main-body {
+ height: 100vh; 
+ background-color: #fff;
+}
+.side-menu {
+    /* position: sticky; */
+    background-color: #161616;
+    /* display: flex;
+    flex-direction: column; */
+    /* overflow: scroll; */
+    padding: 0 !important;
+    /* border: 0.5px solid #161616; */
+    height: 100%;
+    overflow: auto;
+}
+.row {
+    height: 100vh;
+}
+.user-profile {
+    display: flex;
+    /* display: inline-block; */
+    
+    width: 100% !important;
+}
+.user-profile-expand {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px;
+}
+
+.sidenav {
+    padding-top: 20px;
+  }
+  
+  /* Style the sidenav links and the dropdown button */
+  .sidenav a, .dropdown-btn {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #fff;
+    display: block;
+    border: none;
+    background: none;
+    width:100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  /* On mouse-over */
+  .sidenav a:hover, .dropdown-btn:hover {
+    color: #000 !important;
+    text-decoration: none;
+    background-color: rgba(178, 190, 195,0.5);
+  }
+
+  /* Add an active class to the active dropdown button */
+  .active {
+    background-color: gray;
+    color: white;
+  }
+  
+  /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+  .dropdown-container {
+    display: none;
+    /* background-color: #262626; */
+    padding-left: 8px;
+  }
+  
+  /* Optional: Style the caret down icon */
+  .fa-caret-down {
+    float: right;
+    padding-right: 8px;
+  }
+
+.articles {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    
+}
+
+.postingForm {
+    width: 90%;
+    height: 100%;
+    margin: 40px auto;
+}
+.posting h1 {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.card {
+    border: none !important;
+}
+
+.card-body {
+    width: 100% !important;
+}
+
+.page img {
+    width: 60% !important;
+    height: auto !important;
+}
+
+.page {
+    max-width: 80% !important;
+    margin: auto !important;
+    border-bottom: 1px solid #161616;
+}
+
+.article-page {
+    margin: auto !important;
+    text-align: center !important;
+    width: 900px;
+}
+
+.article-content {
+    margin: auto !important;
+    text-align: center !important;
+    overflow: hidden;
+    /* height: 600px; */
+    text-overflow: ellipsis;
+}
+.article-page p {
+    text-align: justify !important;
+}
+
+.jumbotron {
+    color: white;
+    text-shadow: 1.5px 1.5px black;
+    background-image: url("./img/bg1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    padding-left: 0 !important;
+}
+
+/* ------------ */
