@@ -10,13 +10,14 @@
      <script src="https://apis.google.com/js/platform.js" async defer></script>
      <meta name="google-signin-client_id" content="227948699050-ml75o10n5ftpfo4d5069bqvjtri10pr2.apps.googleusercontent.com">
      <!-- ------- -->
+         <!-- using quil -->
+    <link href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet"> 
+    <script src="https://cdn.quilljs.com/1.3.4/quill.js"></script>
     <script src="https://kit.fontawesome.com/bc382c3fce.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <!-- using quil -->
-    <link href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet"> 
-    <script src="https://cdn.quilljs.com/1.3.4/quill.js"></script>
+
     <!-- UBAH UNTUK GANTI ICON DI TAB BROWSER -->
     <link rel="shortcut icon" href="https://icon-library.net/images/icon-for-wordpress/icon-for-wordpress-16.jpg" />
     <title>Mini WordPress</title>
@@ -37,7 +38,7 @@
                         </div>
                         <button type="submit" class="btn-login">LOGIN</button>
                     </form>
-                    <div class="g-signin2" data-onsuccess="onSignIn" @click="onSignIn"></div>
+                    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
                     <p>No account? <a href="#wrapper-signup">Sign up</a></p>
                 </div>
             </div>
@@ -63,7 +64,7 @@
         <!-- END OF REGIS -->
 
         <!-- AFTERLOGIN -->
-        <div v-if="afterLogin">
+        <div v-show="afterLogin">
             <!-- Navbar Here -->
             <header class="sticky-top">
                 <nav class="navbar bg-light">
@@ -102,7 +103,7 @@
                             <a href="#" @click="writeBtn()"><i class="fas fa-pencil-alt"></i> Write</a>
                         </div> 
                     </div>
-                    <div class="col-md-10 col-sm-8" style="padding-left: 0 !important;">
+                    <div class="col-md-10 col-sm-8 rightSide" style="padding-left: 0 !important;">
                         <!-- HOME PAGE -->
                         <div class="homePage" v-show="isHome">
                                 <div class="jumbotron jumbotron-fluid">
@@ -122,11 +123,14 @@
                                             Success add a new article
                                         </div>
                                     </div>
-                                    <h1>Posting a New Article</h1>
+                                    <h1 style="color:white; text-shadow: 2px 2px black;">Posting a New Article</h1>
                                     <hr>
+                                    
                                     <form class="postingForm" @submit.prevent="postArticle()">
                                         <input type="text" id="title" class="form-control" placeholder="title" v-model="title">
-                                        <input type="text" id="editor">
+                                        <input type="file" v-on:change="previewFile" required>
+                                        <!-- <input type="text" id="editor"> -->
+                                        <div id="editor" style="max-height:400px;overflow:scroll"></div>
                                         <input class="btn btn-primary my-2" type="submit" value="POST">
                                     </form>
                             </div>
@@ -143,6 +147,7 @@
                                                 <a href="#" class="btn btn-danger" style="float: right;" @click="deleteArticle(article._id)">delete</a>
                                                 <a href="#" class="btn btn-success" style="float: right;" @click="updateBtn(article._id,article.title,article.content)">update</a>
                                         </div>
+                                        <div><img :src="article.featured_image" alt=""></div>
                                         <!-- created at -->
                                         {{ article.createdAt }}
                                         <!-- Title -->
@@ -151,7 +156,6 @@
                                         <hr class="hr-light">
                                         <!-- Text -->
                                         <p class="card-text white-text mb-4" v-html="article.content"></p>
-                                        <p>{{ article.content }}</p>
                                         <!-- Link -->
                                         <a href="#!" class="white-text d-flex justify-content-end" @click="tes(`${article._id}`)"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></a>
                                     </div>
@@ -166,6 +170,7 @@
                                 <div class="card my-2 mx-2">
                                     <!-- Card content -->
                                     <div class="card-body elegant-color white-text rounded-bottom">
+                                        <div><img :src="article.featured_image" alt=""></div>
                                         <!-- created at -->
                                         {{ article.createdAt }}
                                         <!-- Title -->
@@ -174,7 +179,6 @@
                                         <hr class="hr-light">
                                         <!-- Text -->
                                         <p class="card-text white-text mb-4" v-html="article.content"></p>
-                                        <p>{{ article.content }}</p>
                                         <!-- Link -->
                                         <a href="#!" class="white-text d-flex justify-content-end" @click="tes(`${article._id}`)"><h5>Read more <i class="fas fa-angle-double-right"></i></h5></a>
                                     </div>
@@ -182,7 +186,7 @@
                             </div>
                         </div>
                         <!-- END OF READ All -->
-                        <!-- WRITE -->
+                        <!-- UPDATE -->
                         <div class="writePage" v-show="isUpdate">
                             <div class="container posting">
                                 <div v-if="isSuccess">
@@ -199,7 +203,7 @@
                                 </form>
                             </div>
                         </div>
-                        <!-- END OF WRITE -->
+                        <!-- END OF UPDATE -->
                     </div>
                 </div>
             </div>
@@ -211,17 +215,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- bootstrap end  -->
-    <script>
-            var toolbarOptions = [
-              ['bold', 'italic']
-            ]
-            var quill = new Quill('#editor', {
-              modules: {
-                toolbar: toolbarOptions
-              },
-              theme: 'snow'
-            });
-          </script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="main.js"></script>

@@ -1,4 +1,3 @@
-
 let app = new Vue ({
     el:'#app',
     data:{
@@ -27,7 +26,10 @@ let app = new Vue ({
         isSuccess : false,
         author :'',
         authorAll : '',
-        articleDataAll : ''
+        articleDataAll : '',
+        formUploadImg:{
+            img:''
+        }
     },
     methods: {
         login(){
@@ -85,64 +87,55 @@ let app = new Vue ({
                 swal('Error', `${this.errTemp}`, "error")
             })
         },
-        onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile()
-            var id_token = googleUser.getAuthResponse().id_token
-            axios({
-                method:'post',
-                url:'http://localhost:3000/user/signGoogle',
-                data: {id_token}
-            })
-            
-            
-            .then((data) => {
-                // console.log(profile)
-                console.log('masuk');
-                
-                // console.log(data,'masuk data nih');
-                
-                swal('success', `berhasil lgoin`, "success")
-                localStorage.setItem('token', data.id_token)
-                this.read()
-                this.readAll()
-                this.isLogin = false
-                this.afterLogin = true
-                this.isHome = true
-                this.isError = false
-            })
-            .catch(err=>{
-                console.log('gagaaaaaaaaaaaaaaaal');
-                
-                err = JSON.parse(err.response.request.response).message[0]
-                this.isError = true
-                this.errTemp = err
-                // swal('Error', `${this.errTemp}`, "error")
-            })
-        },
         logout(){
             localStorage.removeItem('token')
             this.isLogin = true
             this.afterLogin = false
             this.isHome = false
         },
+        sendingEvent(file,formData){
+            formData.append('image',file)
+        },
+        previewFile(event){
+            this.formUploadImg.img = event.target.files[0]
+        },
         postArticle() {
+            let {img} = this.formUploadImg
+            let bodyFormData = new FormData()
+            bodyFormData.append('image',img)
+            
             axios({
                 method:'post',
-                url:'http://localhost:3000/article',
+                url:'http://localhost:3000/article/upload',
                 headers:{
                     token:localStorage.getItem('token')
                 },
-                data: {title:this.title,content:quill.root.innerHTML}
+                data: bodyFormData
             })
+            .then(({data})=>{
+                console.log('masuk post article',data.link)
+                return axios({
+                    method:'post',
+                    url:'http://localhost:3000/article',
+                    headers:{
+                        token:localStorage.getItem('token')
+                    },
+                    data: {title:this.title,content:contentHtml,featured_image: data.link}
+                })
+            })
+            
             .then(({data})=>{
                 console.log(data,'ini data');
                 this.author = data.author
                 this.read()
                 this.title = ''
+                quill.setContents([{ insert: '\n' }]);
                 this.isSuccess = true
                 swal('success','Article is successfuly created','success')
             })
             .catch(err=>{
+                console.log(err);
+                
                 swal('Error', `${err}`, "error")
             })
         },
@@ -279,5 +272,59 @@ let app = new Vue ({
             this.read()
             this.readAll()
         }
+        
     }
 })
+
+let toolbarOptions= [
+    ['bold', 'italic', 'underline'],
+    [{'header' :[1 ,2 ,3 ,4 ,5 ,6 ,false] }],
+    [{'list' :'ordered'}, {'list' :'bullet'}],
+    [{'script' :'sub'}, {'script' :'super'}],
+    ['image' , 'formula'],
+    [{'color' :[] }, {'background' :[] }],
+    [{'font' : [] }],
+    [{'align' : []} ]
+    ];
+  let quill = new Quill('#editor',{
+    modules: {
+      toolbar: toolbarOptions
+    },
+    placeholder: 'Write content here...',
+    theme: 'snow'
+  });
+
+
+  quill.on('text-change', function() {
+    contentHtml = quill.root.innerHTML;
+  });
+
+// function onSignIn(googleUser) {
+//     console.log('masuk masuk masuk');
+    
+//     var profile = googleUser.getBasicProfile()
+//     var id_token = googleUser.getAuthResponse().id_token
+    
+//     console.log(profile.ig);
+    
+//     axios({
+//         method:'post',
+//         url:'http://localhost:3000/user/signGoogle',
+//         data: {id_token}
+//     })
+//     .then(({data}) => {
+
+//         // swal('success', `berhasil lgoin`, "success")
+//         localStorage.setItem('token', data)
+//         this.isLogin = false
+//         this.afterLogin = true
+//         this.isHome = true
+//         this.isError = false
+//     })
+//     .catch(err=>{
+//         err = JSON.parse(err.response.request.response).message[0]
+//         this.isError = true
+//         this.errTemp = err
+//         // swal('Error', `${this.errTemp}`, "error")
+//     })
+// }

@@ -13,6 +13,14 @@ body {
     background-size: cover;
 }
 
+.rightSide {
+    background-image: url('./img/bg1.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .loginRegisSection h1{
     font-size: 110%;
 }
@@ -291,6 +299,16 @@ a:hover{
     
 }
 
+.posting {
+    height: 250px;
+}
+
+.ql-toolbar.ql-snow {
+    background-color: white;
+}
+.ql-editor {
+    background-color: white;
+}
 .postingForm {
     width: 90%;
     height: 100%;
@@ -350,3 +368,15 @@ a:hover{
 }
 
 /* ------------ */
+.ql-container {
+    overflow: auto !important;
+    height: 100% !important;
+}
+
+.page img {
+    width: 30vw !important;
+    height: 50vh !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: 50% 50% !important;
+}
